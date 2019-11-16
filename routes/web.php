@@ -25,3 +25,5 @@ Route::get('/test', 'msgController@getInbox');
 Route::get('send', 'msgController@sendMsg');
 
 Route::get('testapi','msgController@testapi');
+
+Route::get('/inbox','viewController@inbox')->name('inbox');
