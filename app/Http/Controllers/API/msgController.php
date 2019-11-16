@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use \Chat;
 class msgController extends Controller
@@ -30,6 +31,7 @@ class msgController extends Controller
             $conversationObj->data = $conversation->conversation->data;
             $conversationObj->last_message = $conversation->conversation->last_message;
             $conversationObj->updated_at = $conversation->conversation->updated_at;
+            $conversationObj->diff = Carbon::parse($conversation->conversation->last_message->created_at)->diffForHumans();
             $conv->conversation = $conversationObj;
             $participations=  $conversation->conversation->getParticipants();
             //return $conversation->conversation;

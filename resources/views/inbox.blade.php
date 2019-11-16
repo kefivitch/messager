@@ -95,6 +95,7 @@
             </div>
         </main>
     </div>
+    
     <script src="{{ asset('js\jquery-3.4.1.slim.min.js') }}"></script>
     <script src="{{ asset('js\bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('js\eva.min.js') }}">
@@ -105,6 +106,47 @@
     </script>
     <script>
         eva.replace()
+    </script>
+    <script >
+        var user_id={{ Auth::user()->id }} ;
+        var direct=$('#direct');
+        axios.post('/api/conversations/'+user_id).then(resp => {
+            //console.log();
+            conversations = resp.data;
+            //console.log(conversations["163"]);
+            for (var key in conversations) {
+                //console.log("key " + key );
+                var name = conversations[key].participants[0].name;
+                var initials = name.match(/\b\w/g) || [];
+                initials = ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
+                str = '<div class="channel ';
+                if(conversations[key].conversation.last_message){
+                    
+                    if(conversations[key].conversation.last_message.is_seen == 0){
+                        str+= 'active';
+                        
+                    }
+                }
+                str+= '"><span class="avatar avatar-sm status status-online mr-3 bg-primary rounded-circle">'+initials+'</span>';
+                str+= '<div class="flex-grow-1"><div class="d-flex align-items-center mb-3"><h6 class="mr-auto">'
+                str+= conversations[key].participants[0].name;
+                str+= '</h6><p class="ml-3">';
+                str+= conversations[key].conversation.diff;
+                str+= '</p></div><p class="text">';
+                if(conversations[key].conversation.last_message) {
+                    str+= conversations[key].conversation.last_message.body;
+                }
+                else {
+                    str+= 'Exemple of sent message.'
+                }
+                str+= '</p></div>'
+                str+= '<input type="hidden" value="';
+                str+= key+'" id="conv_id"></div>';
+                direct.prepend(str);
+                
+            }
+            console.log(conversations["163"].conversation.last_message.body);
+        });
     </script>
 </body>
 
