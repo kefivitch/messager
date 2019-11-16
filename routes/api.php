@@ -24,7 +24,9 @@ Route::post('/users', 'API\msgController@allUsers');
 Route::post('/conversations/{user_id}', 'API\msgController@getConversations');
 Route::post('/messages/{user_id}/{conversation_id}', 'API\msgController@getMessages');
 
+Route::post('/read/{user_id}/{conversation_id}', 'API\msgController@readConversation');
 
+//Route::post('/send/{user_id}/{conversation_id}', 'API\msgController@sendMessage');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

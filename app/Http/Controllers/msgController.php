@@ -12,19 +12,19 @@ class msgController extends Controller
 {
     public function getInbox()
     {
-        $Connecteduser = User::find(2)->first();
-        $user = User::find(2);
+        //$Connecteduser = User::find(2)->first();
+        /*$user = User::find(60);
         $other = User::find(1);
         //return $user->getParticipantDetails();
         $participants = [$user, $other];
         //return $participants;
 
-        //$conversation = Chat::createConversation($participants)->makePrivate();
+        $conversation = Chat::createConversation($participants)->makePrivate();
         //$conversation = Chat::conversations()->getById(5);
-        /*$message = Chat::message('Hello from 2 to 1')
+        $message = Chat::message('Hello from 60 to 1')
             ->from($user)
             ->to($conversation)
-            ->send();*/
+            ->send();
         //$conversation = Chat::conversations()->between($other, $user);
         /*$participantOneConversationIds = $conversation
             ->participantConversations($user, false)
@@ -57,7 +57,7 @@ class msgController extends Controller
             }
             
         }*/
-        $faker = Faker::create('en_EN');
+        /*$faker = Faker::create('en_EN');
         $user = User::find(1);
         for ($i = 10; $i < 60; $i++) {
             $other = User::find($i);
@@ -71,15 +71,24 @@ class msgController extends Controller
             $conversation->update(['data' => $data]);
             //$conversations = Chat::conversations()->common($participants);
         }
+        */
+        //$message = Chat::messages()->getById(154);
+        $conversation = Chat::conversations()->getById(164);
         
+        return $conversation->messages()->get() ;
 
     }
     public function sendMsg(Request $request)
     {
         $faker = Faker::create('en_EN');
-        $user = User::findOrfail(1);
-        $conversation = Chat::conversations()->getById(163);
-        for ($i=0; $i <150; $i++) {
+        
+        $conversation = Chat::conversations()->getById(164);
+        for ($i=0; $i <21; $i++) {
+            if($i%2 == 0) {
+                $user = User::findOrfail(60);
+            } else {
+                $user = User::findOrfail(1);
+            }
             $message = Chat::message($faker->text(10))
                 ->from($user)
                 ->to($conversation)
