@@ -30,3 +30,16 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
 });
+import Echo from "laravel-echo"
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'b3090ece02c41b33bc54',
+    cluster: 'eu',
+    forceTLS: true
+});
+
+var channel = Echo.channel('my-channel');
+channel.listen('.my-event', function (data) {
+    alert(JSON.stringify(data));
+});

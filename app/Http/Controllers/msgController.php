@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use \Chat;
 use Faker\Factory as Faker;
-
+use Illuminate\Support\Facades\Crypt;
+use App\Events\MyEvent;
 class msgController extends Controller
 {
     public function getInbox()
@@ -73,23 +74,25 @@ class msgController extends Controller
         }
         */
         //$message = Chat::messages()->getById(154);
-        $conversation = Chat::conversations()->getById(164);
+        /*$conversation = Chat::conversations()->getById(164);
         
-        return $conversation->messages()->get() ;
+        return $conversation->messages()->get() ;*/
+
+        event(new MyEvent('hello world'));
 
     }
     public function sendMsg(Request $request)
     {
         $faker = Faker::create('en_EN');
         
-        $conversation = Chat::conversations()->getById(164);
+        $conversation = Chat::conversations()->getById(163);
         for ($i=0; $i <21; $i++) {
             if($i%2 == 0) {
-                $user = User::findOrfail(60);
+                $user = User::findOrfail(59);
             } else {
                 $user = User::findOrfail(1);
             }
-            $message = Chat::message($faker->text(10))
+            $message = Chat::message(Crypt::encryptString($faker->text(10)))
                 ->from($user)
                 ->to($conversation)
                 ->send();

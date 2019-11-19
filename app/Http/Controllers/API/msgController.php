@@ -7,18 +7,25 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use \Chat;
+use Illuminate\Support\Facades\Crypt;
+use Pusher\Pusher;
+use App\Events\MyEvent;
 class msgController extends Controller
 {
     public function allUsers()
     {
         return User::all();
     }
-
+    function cmp($a, $b)
+    {
+        return !strcmp($a->conversation->last_message->created_at, $b->conversation->last_message->created_at);
+    }
     public function getConversations($user_id)
     {
         $participantModel = User::findOrfail($user_id);
         $user_conversations = Chat::conversations()
             ->setParticipant($participantModel)
+            ->setPaginationParams(['sorting' => 'asc'])
             ->get();
         //return $participantModel->participations();
         $convs = array();
@@ -30,14 +37,16 @@ class msgController extends Controller
             $conversationObj->direct_message = $conversation->conversation->direct_message;
             $conversationObj->data = $conversation->conversation->data;
             $conversationObj->last_message = $conversation->conversation->last_message;
+            $conversationObj->last_message->body = Crypt::decryptString($conversation->conversation->last_message->body);
             $conversationObj->updated_at = $conversation->conversation->updated_at;
             $conversationObj->diff = Carbon::parse($conversation->conversation->last_message->created_at)->diffForHumans();
             $conv->conversation = $conversationObj;
             $participations=  $conversation->conversation->getParticipants();
             //return $conversation->conversation;
+            $particips = array();
             foreach ($participations as $participant ) {
-                $particips = array();
-                if($participant != $user_id) {
+                
+                if($participant->id != $user_id) {
                     $particips[] = $participant;
                 }
             }
@@ -45,6 +54,8 @@ class msgController extends Controller
 
             $convs[$conversation->conversation->id] = $conv;
         }
+        uasort($convs, array($this, "cmp"));
+        
         return $convs;
         //return json_encode($convs["163"]->participants[0]->name) ;
     }
@@ -70,7 +81,7 @@ class msgController extends Controller
             else {
                 $msgObj->is_sender = 0;
             }
-            $msgObj->body = $message->body;
+            $msgObj->body = Crypt::decryptString($message->body);
             $msgObj->type = $message->type;
             $msgObj->created_at = $message->created_at;
             $sender->id =  $message->sender->id;
@@ -91,4 +102,21 @@ class msgController extends Controller
 
     }
     
+    public function sendMessage($user_id,$conversation_id,Request $request)
+    {
+        
+        $participantModel = User::findOrfail($user_id);
+        $conversation = Chat::conversations()->getById($conversation_id);
+        if(strlen($request->data["message"])){
+        $message = Chat::message(Crypt::encryptString($request->data["message"]))
+            ->from($participantModel)
+            ->to($conversation)
+            ->send();
+            event(new MyEvent('hello world'));
+        }
+        //return $message;
+        
+
+    }
+
 }
