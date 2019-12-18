@@ -31,3 +31,8 @@ Route::post('/send/{user_id}/{conversation_id}', 'API\msgController@sendMessage'
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/updateUser', 'userController@updateUser')->name('updateUser');
+
+
+Route::post('/createConv', 'API\msgController@createConv')->name('createConv');

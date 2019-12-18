@@ -23,17 +23,19 @@
                 <div class="px-3 py-5 px-sm-5">
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="details" role="tabpanel">
-                            <form>
+                            <form method="POST" action={{ route('createConv') }}>
+                                @csrf
+                                @method('POST')
                                 <label for="subject">Subject</label>
-                                <input class="form-control form-control-lg mb-5" id="subject" type="text"
+                                <input class="form-control form-control-lg mb-5" id="subject" name="subject" type="text"
                                     placeholder="What's the subject?">
                                 <label for="message">Message</label>
-                                <textarea class="form-control" id="message" rows="3"
+                                <textarea class="form-control" name="message" id="message" rows="3"
                                     placeholder="Hmm, are you friendly?"></textarea>
-                            </form>
+                            
                         </div>
                         <div class="tab-pane fade" id="members" role="tabpanel">
-                            <form>
+                            
                                 <div class="input-group mb-5">
                                     <div class="input-group-prepend">
                                         <i data-eva="funnel-outline"></i>
@@ -41,104 +43,41 @@
                                     <input class="form-control form-control-lg" type="search" placeholder="Search"
                                         aria-label="Search">
                                 </div>
-                            </form>
+                            
                             <h3>Members</h3>
                             <hr class="mb-0">
-                            <div class="d-flex py-5 border-bottom">
-                                <span
-                                    class="avatar avatar-sm status status-online mr-3 bg-primary rounded-circle">jd</span>
-                                <div class="mr-auto">
-                                    <h6 class="mb-2 lh-100">John Doe</h6>
-                                    <p class="lh-100">Manhattan</p>
+                            @foreach (App\User::all() as $user)
+                            @php
+                                $words = explode(" ", $user->name);
+                                $acronym = "";
+                                foreach ($words as $w) {
+                                    $acronym .= $w[0];
+                                }
+                            @endphp
+
+                                <div class="d-flex py-5 border-bottom">
+                                    <span
+                                        class="avatar avatar-sm status status-online mr-3 bg-primary rounded-circle">{{ $acronym }}</span>
+                                    <div class="mr-auto">
+                                        <h6 class="mb-2 lh-100">{{ $user->name }}</h6>
+                                        <p class="lh-100">{{ $user->email }}</p>
+                                    </div>
+                                    <div class="form-check align-self-center ml-3">
+                                        <input class="form-check-input" value="{{ $user->id }}" name="users[]" type="checkbox">
+                                    </div>
                                 </div>
-                                <div class="form-check align-self-center ml-3">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <div class="d-flex py-5 border-bottom">
-                                <span
-                                    class="avatar avatar-sm status status-offline mr-3 bg-success rounded-circle">jd</span>
-                                <div class="mr-auto">
-                                    <h6 class="mb-2 lh-100">John Doe</h6>
-                                    <p class="lh-100">Manhattan</p>
-                                </div>
-                                <div class="form-check align-self-center ml-3">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <div class="d-flex py-5 border-bottom">
-                                <span
-                                    class="avatar avatar-sm status status-offline mr-3 bg-info rounded-circle">jd</span>
-                                <div class="mr-auto">
-                                    <h6 class="mb-2 lh-100">John Doe</h6>
-                                    <p class="lh-100">Manhattan</p>
-                                </div>
-                                <div class="form-check align-self-center ml-3">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <div class="d-flex py-5 border-bottom">
-                                <span
-                                    class="avatar avatar-sm status status-offline mr-3 bg-warning rounded-circle">jd</span>
-                                <div class="mr-auto">
-                                    <h6 class="mb-2 lh-100">John Doe</h6>
-                                    <p class="lh-100">Manhattan</p>
-                                </div>
-                                <div class="form-check align-self-center ml-3">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <div class="d-flex py-5 border-bottom">
-                                <span
-                                    class="avatar avatar-sm status status-offline mr-3 bg-danger rounded-circle">jd</span>
-                                <div class="mr-auto">
-                                    <h6 class="mb-2 lh-100">John Doe</h6>
-                                    <p class="lh-100">Manhattan</p>
-                                </div>
-                                <div class="form-check align-self-center ml-3">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <div class="d-flex py-5 border-bottom">
-                                <span
-                                    class="avatar avatar-sm status status-offline mr-3 bg-primary rounded-circle">jd</span>
-                                <div class="mr-auto">
-                                    <h6 class="mb-2 lh-100">John Doe</h6>
-                                    <p class="lh-100">Manhattan</p>
-                                </div>
-                                <div class="form-check align-self-center ml-3">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <div class="d-flex py-5 border-bottom">
-                                <span
-                                    class="avatar avatar-sm status status-offline mr-3 bg-success rounded-circle">jd</span>
-                                <div class="mr-auto">
-                                    <h6 class="mb-2 lh-100">John Doe</h6>
-                                    <p class="lh-100">Manhattan</p>
-                                </div>
-                                <div class="form-check align-self-center ml-3">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
-                            <div class="d-flex py-5 border-bottom">
-                                <span
-                                    class="avatar avatar-sm status status-offline mr-3 bg-info rounded-circle">jd</span>
-                                <div class="mr-auto">
-                                    <h6 class="mb-2 lh-100">John Doe</h6>
-                                    <p class="lh-100">Manhattan</p>
-                                </div>
-                                <div class="form-check align-self-center ml-3">
-                                    <input class="form-check-input" type="checkbox">
-                                </div>
-                            </div>
+                            @endforeach
+                            
+                            
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-block btn-lg btn-primary" type="submit">Compose</button>
+                <input vlaue="Compose" class="btn btn-block btn-lg btn-primary" type="submit">
             </div>
+            <input type="hidden" value="{{ Auth::user()->id }}" name="user_id">
+            </form>
         </div>
     </div>
 </div>

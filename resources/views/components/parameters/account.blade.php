@@ -10,18 +10,20 @@
     </div>
     <div class="collapse" id="collapseOne" data-parent="#accordionOne" aria-labelledby="headingOne">
         <div class="accordion-body">
-            <form>
+            <form method="POST" action="{{ route('updateUser') }}">
+                @csrf
+                @method('POST')
+                <input type="hidden" value="{{ Auth::id() }}" name="user_id">
                 <label for="name">Name</label>
-                <input class="form-control form-control-lg mb-5" id="name" type="text" placeholder="Name">
+                <input class="form-control form-control-lg mb-5" name="name" value="{{ Auth::user()->name }}" id="name" type="text" placeholder="Name">
                 <label for="email">Email</label>
-                <input class="form-control form-control-lg mb-5" id="email" type="email" placeholder="Email Address">
-                <label for="address">Address</label>
+                <input class="form-control form-control-lg mb-5" name="email" value="{{ Auth::user()->email }}" id="email" type="email" placeholder="Email Address">
+                {{-- <label for="address">Address</label>
                 <input class="form-control form-control-lg mb-5" id="address" type="text" placeholder="Address">
                 <label for="biography">Biography</label>
                 <textarea class="form-control mb-5" id="biography" rows="3"
-                    placeholder="Tell us a little about yourself"></textarea>
-                <button class="btn btn-block btn-lg btn-primary" type="submit">Apply
-                    changes</button>
+                    placeholder="Tell us a little about yourself"></textarea> --}}
+                <input type="submit" class="btn btn-block btn-lg btn-primary" value="Apply changes">
             </form>
         </div>
     </div>

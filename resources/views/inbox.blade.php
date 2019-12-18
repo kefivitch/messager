@@ -10,7 +10,92 @@
     <link rel="stylesheet" href="{{ asset('\css\swipe.min.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script src="https://js.pusher.com/5.0/pusher.min.js"></script>
-    
+            <style type="text/css">/**
+         * @license
+         * Copyright Akveo. All Rights Reserved.
+         * Licensed under the MIT License. See License.txt in the project root for license information.
+         */
+        .eva-animation {
+        animation-duration: 1s;
+        animation-fill-mode: both; }
+
+        .eva-infinite {
+        animation-iteration-count: infinite; }
+
+        .eva-icon-shake {
+        animation-name: eva-shake; }
+
+        .eva-icon-zoom {
+        animation-name: eva-zoomIn; }
+
+        .eva-icon-pulse {
+        animation-name: eva-pulse; }
+
+        .eva-icon-flip {
+        animation-name: eva-flipInY; }
+
+        .eva-hover {
+        display: inline-block; }
+
+        .eva-hover:hover .eva-icon-hover-shake, .eva-parent-hover:hover .eva-icon-hover-shake {
+        animation-name: eva-shake; }
+
+        .eva-hover:hover .eva-icon-hover-zoom, .eva-parent-hover:hover .eva-icon-hover-zoom {
+        animation-name: eva-zoomIn; }
+
+        .eva-hover:hover .eva-icon-hover-pulse, .eva-parent-hover:hover .eva-icon-hover-pulse {
+        animation-name: eva-pulse; }
+
+        .eva-hover:hover .eva-icon-hover-flip, .eva-parent-hover:hover .eva-icon-hover-flip {
+        animation-name: eva-flipInY; }
+
+        @keyframes eva-flipInY {
+        from {
+            transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+            animation-timing-function: ease-in;
+            opacity: 0; }
+        40% {
+            transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+            animation-timing-function: ease-in; }
+        60% {
+            transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+            opacity: 1; }
+        80% {
+            transform: perspective(400px) rotate3d(0, 1, 0, -5deg); }
+        to {
+            transform: perspective(400px); } }
+
+        @keyframes eva-shake {
+        from,
+        to {
+            transform: translate3d(0, 0, 0); }
+        10%,
+        30%,
+        50%,
+        70%,
+        90% {
+            transform: translate3d(-3px, 0, 0); }
+        20%,
+        40%,
+        60%,
+        80% {
+            transform: translate3d(3px, 0, 0); } }
+
+        @keyframes eva-pulse {
+        from {
+            transform: scale3d(1, 1, 1); }
+        50% {
+            transform: scale3d(1.2, 1.2, 1.2); }
+        to {
+            transform: scale3d(1, 1, 1); } }
+
+        @keyframes eva-zoomIn {
+        from {
+            opacity: 1;
+            transform: scale3d(0.5, 0.5, 0.5); }
+        50% {
+            opacity: 1; } }
+        </style>
 </head>
 
 <body onload="updateConversation();" >
@@ -27,10 +112,49 @@
                             aria-label="Search">
                     </div>
                 </form>
+                <div class="row">
+                    <style>
+                        .alert {
+                            margin-top: 10px;
+                            padding: 20px;
+                            width : 100%;
+                        }    
+                        .alert-success {
+                            color: #468847;
+                            background-color: #dff0d8;
+                            border-color: #d6e9c6;
+                        }
+
+                        .alert-error {
+                            color: #b94a48;
+                            background-color: #f2dede;
+                            border-color: #eed3d7;
+                        }
+                    </style>
+                    @if (session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                    @endif
+                    @if (session('error'))
+                    <div class="alert alert-error" role="alert">
+                        {{ session('error') }}
+                    </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="alert alert-error">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                </div>
                 <div class="tab-content">
                     <input type="hidden" value="" id="selectedChannel">
                     <div class="tab-pane fade show active" id="channels" role="tabpanel">
-                        <ul class="nav nav-tabs nav-justified nav-sm mt-3" role="tablist" aria-orientation="horizontal">
+                         <ul class="nav nav-tabs nav-justified nav-sm mt-3" role="tablist" aria-orientation="horizontal">
                             <li class="nav-item">
                                 <a class="nav-link active" data-toggle="tab" href="#direct" role="tab"
                                     aria-controls="direct" aria-selected="true">Direct</a>
@@ -74,10 +198,9 @@
                         <div id="accordionOne">
                             @include('components.parameters.account')
                             @include('components.parameters.privacy')
-
-                            @include('components.parameters.appearance')
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -91,9 +214,7 @@
                             @include('components.chat.body')
                             @include('components.chat.footer')
                         </div>
-                        <button class="btn btn-circle btn-neutral sidebar-toggler" data-toggle="sidebar-offcanvas">
-                            <i class="ml-n3" data-eva="chevron-left"></i>
-                        </button>
+                        
                     </div>
                     @include('components.chat.sidebar')
                 </div>

@@ -10,6 +10,8 @@ use \Chat;
 use Illuminate\Support\Facades\Crypt;
 use Pusher\Pusher;
 use App\Events\MyEvent;
+use Illuminate\Support\Facades\Auth;
+
 class msgController extends Controller
 {
     public function allUsers()
@@ -119,4 +121,26 @@ class msgController extends Controller
 
     }
 
+    public function createConv(Request $request)
+    {
+        //return $request;
+        $user = User::find($request->user_id);
+        $conversation = Chat::createConversation(
+            array(
+                User::find($request->users[0]),
+                User::find($request->user_id)
+                )
+            )->makePrivate();
+
+        Chat::message(Crypt::encryptString($user->name.' wants to talk about '.$request->subject.' with you !'))
+            ->from($user)
+            ->to($conversation)
+            ->send();
+
+        Chat::message(Crypt::encryptString($request->message))
+            ->from($user)
+            ->to($conversation)
+            ->send();
+        return redirect('/inbox');
+    }
 }

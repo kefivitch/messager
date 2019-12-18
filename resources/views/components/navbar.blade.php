@@ -10,12 +10,12 @@
                     <i class="eva-md" data-eva="message-square" data-eva-animation="pulse"></i>
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#friends" role="tab" aria-controls="friends"
                     aria-selected="false">
                     <i class="eva-md" data-eva="people" data-eva-animation="pulse"></i>
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item flex-lg-grow-1">
                 <a class="nav-link" data-toggle="tab" href="#notifications" role="tab" aria-controls="notifications"
                     aria-selected="false">
@@ -29,12 +29,19 @@
                 </a>
             </li>
             <li class="nav-item d-none d-lg-block">
-                <a class="nav-link" href="#">
-                    <i class="eva-md" data-eva="bulb" data-eva-animation="pulse"></i>
+                <a class="nav-link" href="/logout">
+                    <i class="eva-md" data-eva="log-out-outline" data-eva-animation="pulse"></i>
                 </a>
             </li>
             <li class="nav-item d-none d-lg-block">
-                <span class="avatar avatar-md status status-online h5 bg-primary rounded-circle">jd</span>
+                @php
+                                $words = explode(" ", Auth::user()->name);
+                                $acronym = "";
+                                foreach ($words as $w) {
+                                    $acronym .= $w[0];
+                                }
+                            @endphp
+                <span class="avatar avatar-md status status-online h5 bg-primary rounded-circle">{{ $acronym }}</span>
             </li>
         </ul>
     </div>

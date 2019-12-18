@@ -10,18 +10,20 @@
     </div>
     <div class="collapse" id="collapseTwo" data-parent="#accordionOne" aria-labelledby="headingTwo">
         <div class="accordion-body">
-            <form>
+            <form action="{{ route('updatePassword') }}" method="POST">
+                @csrf
+                @method('post')
+                <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                 <label for="currentPassword">Current Password</label>
-                <input class="form-control form-control-lg mb-5" id="currentPassword" type="password"
+                <input name="curPassword" class="form-control form-control-lg mb-5" id="currentPassword" type="password"
                     placeholder="Current Password">
                 <label for="newPassword">New Password</label>
-                <input class="form-control form-control-lg mb-5" id="newPassword" type="password"
+                <input name="password" class="form-control form-control-lg mb-5" id="newPassword" type="password"
                     placeholder="New Password">
                 <label for="repeatPassword">Repeat Password</label>
-                <input class="form-control form-control-lg mb-5" id="repeatPassword" type="password"
+                <input name="password_confirmation" class="form-control form-control-lg mb-5" id="repeatPassword" type="password"
                     placeholder="Repeat Password">
-                <button class="btn btn-block btn-lg btn-primary" type="submit">Apply
-                    changes</button>
+                <input class="btn btn-block btn-lg btn-primary" type="submit" value="Apply changes">
             </form>
         </div>
     </div>

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Auth::routes();
@@ -27,3 +27,11 @@ Route::get('send', 'msgController@sendMsg');
 Route::get('testapi','msgController@testapi');
 
 Route::get('/inbox','viewController@inbox')->name('inbox');
+
+Route::get('/logout' , function() {
+    auth()->logout();
+    // redirect to homepage
+    return redirect('/');
+});
+
+Route::post('/updatePassword', 'userController@updatePassword')->name('updatePassword');
